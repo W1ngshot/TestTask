@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{1D54A1
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTask.ConversionReportApp.UnitTests", "TestTask.ConversionReportApp.UnitTests\TestTask.ConversionReportApp.UnitTests.csproj", "{4A062216-3823-4B18-8EF8-719912EBBCB8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{8BF70DEC-D614-48C9-8CC4-98DE3FF9AB6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BF70DEC-D614-48C9-8CC4-98DE3FF9AB6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BF70DEC-D614-48C9-8CC4-98DE3FF9AB6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A062216-3823-4B18-8EF8-719912EBBCB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A062216-3823-4B18-8EF8-719912EBBCB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A062216-3823-4B18-8EF8-719912EBBCB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A062216-3823-4B18-8EF8-719912EBBCB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1698A8D9-4215-43BE-883D-AAF4FAE9E77F} = {2D3B4D5B-FE55-4D35-B31D-F127F9F9AFA9}
