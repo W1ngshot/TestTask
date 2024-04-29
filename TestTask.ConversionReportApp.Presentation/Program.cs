@@ -24,6 +24,7 @@ builder.Services
     .AddGrpcConfiguration()
     .AddGrpcSwagger()
     .AddSwaggerGen()
+    .AddRateLimiterConfiguration(builder.Configuration)
     .AddFluentValidation();
 
 var app = builder.Build();
@@ -36,6 +37,7 @@ if (app.Environment.IsDevelopment())
 
 app.MigrateUp();
 
-app.MapGrpcServices();
+app.UseRateLimiter();
+app.MapGrpcServices(builder.Configuration);
 
 app.Run();

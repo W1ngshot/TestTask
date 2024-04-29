@@ -29,6 +29,8 @@
       QuartzBatch__SmallBatchSize: ${REPORT_APP_QUARTZ_SMALL_BATCH_SIZE}
       QuartzBatch__TimeToBeImmediateInSeconds: ${REPORT_APP_QUARTZ_TIME_TO_BE_IMMEDIATE}
       QuartzBatch__LargeBatchSize: ${REPORT_APP_QUARTZ_LARGE_BATCH_SIZE}
+      RateLimiter__WindowInSeconds: ${REPORT_APP_RATE_LIMITER_WINDOW_IN_SECONDS}
+      RateLimiter__PermitLimit: ${REPORT_APP_RATE_LIMITER_PERMIT_LIMIT}
   
   postgres:
     image: postgres:14-alpine

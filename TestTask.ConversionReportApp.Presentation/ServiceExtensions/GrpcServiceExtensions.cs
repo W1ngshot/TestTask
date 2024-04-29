@@ -1,4 +1,5 @@
-﻿using TestTask.ConversionReportApp.Presentation.Interceptors;
+﻿using TestTask.ConversionReportApp.Infrastructure.Options;
+using TestTask.ConversionReportApp.Presentation.Interceptors;
 using TestTask.ConversionReportApp.Presentation.Services;
 
 namespace TestTask.ConversionReportApp.Presentation.ServiceExtensions;
@@ -16,8 +17,11 @@ public static class GrpcServiceExtensions
         return services;
     }
     
-    public static void MapGrpcServices(this IEndpointRouteBuilder app)
+    public static void MapGrpcServices(this IEndpointRouteBuilder app, IConfiguration configuration)
     {
-        app.MapGrpcService<ReportApiService>();
+        var limiterOptions = configuration.GetRequiredSection(LimiterOptions.RateLimiter)
+            .Get<LimiterOptions>() ?? throw new ArgumentNullException(nameof(LimiterOptions));
+        
+        app.MapGrpcService<ReportApiService>().RequireRateLimiting(limiterOptions.Name);
     }
 }

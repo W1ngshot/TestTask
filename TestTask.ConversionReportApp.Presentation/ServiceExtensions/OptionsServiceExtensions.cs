@@ -9,6 +9,8 @@ public static class OptionsServiceExtensions
         services.Configure<PostgresOptions>(configuration.GetSection(PostgresOptions.Postgres));
         services.Configure<KafkaOptions>(configuration.GetSection(KafkaOptions.Kafka));
         services.Configure<QuartzBatchOptions>(configuration.GetSection(QuartzBatchOptions.QuartzBatch));
+        services.Configure<RedisOptions>(configuration.GetSection(RedisOptions.Redis));
+        services.Configure<LimiterOptions>(configuration.GetSection(LimiterOptions.RateLimiter));
         
         return services;
     }
