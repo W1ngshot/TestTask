@@ -1,0 +1,38 @@
+syntax = "proto3";
+option csharp_namespace = "Report.Api";
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+service ReportsApi {
+  rpc GetReports(GetReportsRequest) returns (GetReportsResponse) {
+    option (google.api.http) = {
+      get: "/reports"
+    };
+  };
+}
+
+message GetReportsRequest {
+  int64 item_id = 1;
+  int64 registration_id = 2;
+  PageInfo page = 3;
+
+  message PageInfo {
+    int32 page_number = 1;
+    int32 elements_per_page = 2;
+  }
+}
+
+message GetReportsResponse {
+  int64 item_id = 1;
+  int64 registration_id = 2;
+  repeated Report reports = 3;
+}
+
+message Report {
+  double ratio = 1;
+  int64 payments_count = 2;
+  google.protobuf.Timestamp conversion_from = 3;
+  google.protobuf.Timestamp conversion_to = 4;
+  google.protobuf.Timestamp requested_at = 5;
+}

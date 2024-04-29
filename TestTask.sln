@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTask.ConversionReportApp.Presentation", "TestTask.ConversionReportApp.Presentation\TestTask.ConversionReportApp.Presentation.csproj", "{633DCCA6-40E5-4F8B-956A-635FC324776A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTask.ConversionReportApp.Domain", "TestTask.ConversionReportApp.Domain\TestTask.ConversionReportApp.Domain.csproj", "{7A50D3D8-557E-4268-BF6B-84452251C0CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTask.ConversionReportApp.Infrastructure", "TestTask.ConversionReportApp.Infrastructure\TestTask.ConversionReportApp.Infrastructure.csproj", "{C8EB2912-52E0-4978-A238-BB041FE5C3FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTask.RequestEventsGenerator", "TestTask.RequestEventsGenerator\TestTask.RequestEventsGenerator.csproj", "{8BF70DEC-D614-48C9-8CC4-98DE3FF9AB6D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{2D3B4D5B-FE55-4D35-B31D-F127F9F9AFA9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "task_build", "task_build", "{1698A8D9-4215-43BE-883D-AAF4FAE9E77F}"
+	ProjectSection(SolutionItems) = preProject
+		docker\task_build\docker-compose.yml = docker\task_build\docker-compose.yml
+		docker\task_build\.env = docker\task_build\.env
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "task_dev", "task_dev", "{E67A2118-14BD-4472-928B-1F3D1078154A}"
+	ProjectSection(SolutionItems) = preProject
+		docker\task_dev\docker-compose.yml = docker\task_dev\docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{1D54A17B-19CC-48E7-A3A5-ED563CCAF73A}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{633DCCA6-40E5-4F8B-956A-635FC324776A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{633DCCA6-40E5-4F8B-956A-635FC324776A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{633DCCA6-40E5-4F8B-956A-635FC324776A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{633DCCA6-40E5-4F8B-956A-635FC324776A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A50D3D8-557E-4268-BF6B-84452251C0CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A50D3D8-557E-4268-BF6B-84452251C0CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A50D3D8-557E-4268-BF6B-84452251C0CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A50D3D8-557E-4268-BF6B-84452251C0CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8EB2912-52E0-4978-A238-BB041FE5C3FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8EB2912-52E0-4978-A238-BB041FE5C3FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8EB2912-52E0-4978-A238-BB041FE5C3FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8EB2912-52E0-4978-A238-BB041FE5C3FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BF70DEC-D614-48C9-8CC4-98DE3FF9AB6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BF70DEC-D614-48C9-8CC4-98DE3FF9AB6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BF70DEC-D614-48C9-8CC4-98DE3FF9AB6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BF70DEC-D614-48C9-8CC4-98DE3FF9AB6D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1698A8D9-4215-43BE-883D-AAF4FAE9E77F} = {2D3B4D5B-FE55-4D35-B31D-F127F9F9AFA9}
+		{E67A2118-14BD-4472-928B-1F3D1078154A} = {2D3B4D5B-FE55-4D35-B31D-F127F9F9AFA9}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,92 @@
+﻿services:
+  report-app:
+    container_name: ${REPORT_APP_HOST}
+    restart: unless-stopped
+    build:
+      context: ./../../
+      dockerfile: TestTask.ConversionReportApp.Presentation/Dockerfile
+    ports:
+      - ${REPORT_APP_HTTP_LOCAL_PORT}:${REPORT_APP_HTTP_PORT}
+      - ${REPORT_APP_HTTP2_LOCAL_PORT}:${REPORT_APP_HTTP2_PORT}
+    depends_on:
+      - postgres
+      - redis
+      - kafka
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:${REPORT_APP_HTTP_PORT};http://+:${REPORT_APP_HTTP2_PORT}
+      ASPNETCORE_Kestrel__Endpoints__Http__Url: http://+:${REPORT_APP_HTTP_PORT}
+      ASPNETCORE_Kestrel__Endpoints__Http__Protocols: Http1AndHttp2
+      ASPNETCORE_Kestrel__Endpoints__Http2__Url: http://+:${REPORT_APP_HTTP2_PORT}
+      ASPNETCORE_Kestrel__Endpoints__Http2__Protocols: Http2
+      Postgres__ConnectionString: Host=${POSTGRES_HOST};Port=${POSTGRES_PORT};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Database=${POSTGRES_DB}
+      Redis__ConnectionString: ${REDIS_HOST}:${REDIS_PORT}
+      Kafka__BootstrapServers: ${KAFKA_HOST}:${KAFKA_INSIDE_PORT}
+      Kafka__GroupId: ${REPORT_APP_KAFKA_GROUP_ID}
+      Kafka__Topic: ${KAFKA_REQUESTS_TOPIC}
+      Kafka__BatchSize: ${REPORT_APP_KAFKA_BATCH_SIZE}
+      Kafka__BatchDelayInSeconds: ${REPORT_APP_KAFKA_BATCH_DELAY}
+      QuartzBatch__SmallBatchSize: ${REPORT_APP_QUARTZ_SMALL_BATCH_SIZE}
+      QuartzBatch__TimeToBeImmediateInSeconds: ${REPORT_APP_QUARTZ_TIME_TO_BE_IMMEDIATE}
+      QuartzBatch__LargeBatchSize: ${REPORT_APP_QUARTZ_LARGE_BATCH_SIZE}
+  
+  postgres:
+    image: postgres:14-alpine
+    container_name: ${POSTGRES_HOST}
+    ports:
+      - ${POSTGRES_LOCAL_PORT}:${POSTGRES_PORT}
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    command: -c log_statement=all
+
+  kafka:
+    image: wurstmeister/kafka:latest
+    container_name: ${KAFKA_HOST}
+    restart: unless-stopped
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:${KAFKA_INSIDE_PORT},OUTSIDE://kafka:${KAFKA_OUTSIDE_PORT}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:${KAFKA_INSIDE_PORT},OUTSIDE://0.0.0.0:${KAFKA_OUTSIDE_PORT}
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:${ZOOKEEPER_PORT}
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_CREATE_TOPICS: >-
+        ${KAFKA_REQUESTS_TOPIC}:1:1
+    ports:
+      - ${KAFKA_OUTSIDE_PORT}:${KAFKA_OUTSIDE_PORT}
+    expose:
+      - ${KAFKA_INSIDE_PORT}
+      - ${KAFKA_OUTSIDE_PORT}
+    volumes:
+      - kafkadata:/kafka
+
+  zookeeper:
+    image: zookeeper:latest
+    container_name: ${ZOOKEEPER_HOST}
+    ports:
+      - ${ZOOKEEPER_LOCAL_PORT}:${ZOOKEEPER_PORT}
+    volumes:
+      - zkdata:/data
+      - zkdatalog:/datalog
+      - zklogs:/logs
+
+  redis:
+    image: redis
+    container_name: ${REDIS_HOST}
+    restart: unless-stopped
+    ports:
+      - ${REDIS_LOCAL_PORT}:${REDIS_PORT}
+
+volumes:
+  dbdata:
+  redisdata:
+  kafkadata:
+  zkdata:
+  zkdatalog:
+  zklogs:
