@@ -15,13 +15,15 @@ public static class RedisCacheServiceExtensions
         {
             options.Configuration = redisOptions.ConnectionString;
         });
+
+        services.AddSingleton<IDistributedCacheWrapper, DistributedCacheWrapper>();
         
         return services;
     }
     
     public static IServiceCollection AddRedisCacheServices(this IServiceCollection services)
     {
-        services.AddSingleton<IReportCacheService, ReportCacheService>();
+        services.AddSingleton(typeof(ICacheService<>), typeof(CacheService<>));
         
         return services;
     }

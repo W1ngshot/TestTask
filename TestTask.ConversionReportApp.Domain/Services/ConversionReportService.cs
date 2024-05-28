@@ -1,4 +1,5 @@
-﻿using TestTask.ConversionReportApp.Domain.InfrastructureInterfaces;
+﻿using TestTask.ConversionReportApp.Domain.Common;
+using TestTask.ConversionReportApp.Domain.InfrastructureInterfaces;
 using TestTask.ConversionReportApp.Domain.Models;
 using TestTask.ConversionReportApp.Domain.Services.Interfaces;
 
@@ -6,12 +7,13 @@ namespace TestTask.ConversionReportApp.Domain.Services;
 
 public class ConversionReportService(
     IConversionReportRepository reportRepository,
-    IReportCacheService cacheService) : IConversionReportService
+    ICacheService<IEnumerable<ConversionReport>> cacheService) : IConversionReportService
 {
     public async Task<IEnumerable<ConversionReport>> GetReportsAsync(GetConversionModel model,
         CancellationToken token)
     {
-        var cachedReports = await cacheService.GetAsync(model, token);
+        var key = CacheKeysGenerator.GetReportsKey(model);
+        var cachedReports = await cacheService.GetAsync(key, token);
         if (cachedReports is not null)
             return cachedReports;
 
@@ -24,7 +26,7 @@ public class ConversionReportService(
         };
         var reports = (await reportRepository.GetReportsAsync(request, token)).ToList();
 
-        await cacheService.SetAsync(model, reports, token);
+        await cacheService.SetAsync(key, reports, token);
         return reports;
     }
 }

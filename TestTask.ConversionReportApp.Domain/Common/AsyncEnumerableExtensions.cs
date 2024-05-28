@@ -31,33 +31,29 @@ public static class AsyncEnumerableExtensions
                 {
                     var task = enumerator.MoveNextAsync();
                     var awaiter = task.GetAwaiter();
-                    if (awaiter.IsCompleted)
-                        goto GetResult;
-
-                    if (delay > TimeSpan.Zero)
+                    if (!awaiter.IsCompleted && delay > TimeSpan.Zero)
                     {
                         await Task.Delay(delay, cancellationToken);
-                        if (awaiter.IsCompleted)
-                            goto GetResult;
+                        if (!awaiter.IsCompleted)
+                        {
+                            if (buffer.Count > 0)
+                            {
+                                enumeratorTask = task;
+
+                                yield return buffer.ToArray();
+
+                                enumeratorTask = default;
+                                buffer.Clear();
+                            }
+
+                            if (await task)
+                                buffer.Add(enumerator.Current);
+                            else
+                                yield break;
+                            continue;
+                        }
                     }
 
-                    if (buffer.Count > 0)
-                    {
-                        enumeratorTask = task;
-
-                        yield return buffer.ToArray();
-
-                        enumeratorTask = default;
-                        buffer.Clear();
-                    }
-
-                    if (await task)
-                        buffer.Add(enumerator.Current);
-                    else
-                        yield break;
-                    continue;
-
-                    GetResult:
                     if (awaiter.GetResult())
                     {
                         buffer.Add(enumerator.Current);
