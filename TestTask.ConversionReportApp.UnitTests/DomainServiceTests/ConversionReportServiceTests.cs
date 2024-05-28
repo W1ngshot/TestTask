@@ -1,5 +1,6 @@
 using AutoBogus;
 using Moq;
+using TestTask.ConversionReportApp.Domain.Common;
 using TestTask.ConversionReportApp.Domain.InfrastructureInterfaces;
 using TestTask.ConversionReportApp.Domain.Models;
 using TestTask.ConversionReportApp.Domain.Services;
@@ -11,7 +12,7 @@ namespace TestTask.ConversionReportApp.UnitTests.DomainServiceTests;
 public class ConversionReportServiceTests
 {
     private readonly Mock<IConversionReportRepository> _reportRepositoryFake = new(MockBehavior.Strict);
-    private readonly Mock<IReportCacheService> _cacheService = new(MockBehavior.Strict);
+    private readonly Mock<ICacheService<IEnumerable<ConversionReport>>> _cacheService = new(MockBehavior.Strict);
 
     private readonly IConversionReportService _reportService;
 
@@ -31,10 +32,11 @@ public class ConversionReportServiceTests
             PageInfo = new PageInfoFaker(reportsCount).Generate()
         };
         var expectedReports = new AutoFaker<ConversionReport>().Generate(reportsCount);
+        var expectedKey = CacheKeysGenerator.GetReportsKey(request);
 
-        _cacheService.Setup(cache => cache.GetAsync(request, It.IsAny<CancellationToken>()))
+        _cacheService.Setup(cache => cache.GetAsync(expectedKey, It.IsAny<CancellationToken>()))
             .ReturnsAsync((IEnumerable<ConversionReport>?) null);
-        _cacheService.Setup(cache => cache.SetAsync(It.IsAny<GetConversionModel>(),
+        _cacheService.Setup(cache => cache.SetAsync(expectedKey,
                 It.IsAny<IEnumerable<ConversionReport>>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
         _reportRepositoryFake.Setup(repository => repository.GetReportsAsync(
@@ -59,10 +61,11 @@ public class ConversionReportServiceTests
             PageInfo = new PageInfoFaker(reportsCount).Generate()
         };
         var expectedReports = new AutoFaker<ConversionReport>().Generate(reportsCount);
+        var expectedKey = CacheKeysGenerator.GetReportsKey(request);
 
-        _cacheService.Setup(cache => cache.GetAsync(request, It.IsAny<CancellationToken>()))
+        _cacheService.Setup(cache => cache.GetAsync(expectedKey, It.IsAny<CancellationToken>()))
             .ReturnsAsync((IEnumerable<ConversionReport>?) null);
-        _cacheService.Setup(cache => cache.SetAsync(request, expectedReports, It.IsAny<CancellationToken>()))
+        _cacheService.Setup(cache => cache.SetAsync(expectedKey, expectedReports, It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
         _reportRepositoryFake.Setup(repository => repository.GetReportsAsync(
                 It.Is<GetConversionRequest>(x =>
@@ -72,7 +75,7 @@ public class ConversionReportServiceTests
 
         await _reportService.GetReportsAsync(request, new CancellationToken());
 
-        _cacheService.Verify(cache => cache.SetAsync(request, expectedReports, It.IsAny<CancellationToken>()),
+        _cacheService.Verify(cache => cache.SetAsync(expectedKey, expectedReports, It.IsAny<CancellationToken>()),
             Times.Once);
     }
 
@@ -87,10 +90,11 @@ public class ConversionReportServiceTests
             PageInfo = new PageInfoFaker(reportsCount).Generate()
         };
         var expectedReports = new AutoFaker<ConversionReport>().Generate(reportsCount);
+        var expectedKey = CacheKeysGenerator.GetReportsKey(request);
 
-        _cacheService.Setup(cache => cache.GetAsync(request, It.IsAny<CancellationToken>()))
+        _cacheService.Setup(cache => cache.GetAsync(expectedKey, It.IsAny<CancellationToken>()))
             .ReturnsAsync(expectedReports);
-        _cacheService.Setup(cache => cache.SetAsync(It.IsAny<GetConversionModel>(),
+        _cacheService.Setup(cache => cache.SetAsync(expectedKey,
                 It.IsAny<IEnumerable<ConversionReport>>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
         _reportRepositoryFake.Setup(repository => repository.GetReportsAsync(
@@ -121,10 +125,11 @@ public class ConversionReportServiceTests
         };
         const int expectedTake = elementsPerPage;
         const int expectedSkip = (pageNumber - 1) * elementsPerPage;
+        var expectedKey = CacheKeysGenerator.GetReportsKey(request);
 
-        _cacheService.Setup(cache => cache.GetAsync(request, It.IsAny<CancellationToken>()))
+        _cacheService.Setup(cache => cache.GetAsync(expectedKey, It.IsAny<CancellationToken>()))
             .ReturnsAsync((IEnumerable<ConversionReport>?) null);
-        _cacheService.Setup(cache => cache.SetAsync(It.IsAny<GetConversionModel>(),
+        _cacheService.Setup(cache => cache.SetAsync(expectedKey,
                 It.IsAny<IEnumerable<ConversionReport>>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
         _reportRepositoryFake.Setup(repository => repository.GetReportsAsync(
